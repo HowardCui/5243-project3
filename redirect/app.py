@@ -7,7 +7,7 @@ from shiny import reactive
 import random
 
 # Config
-A_URL="https://howardcui.shinyapps.io/project3-app-a1/"
+A_URL="https://howardcui.shinyapps.io/project3-app-a/"
 B_URL="https://howardcui.shinyapps.io/project3-app-b/"
 
 COOKIE_NAME="ab_group"

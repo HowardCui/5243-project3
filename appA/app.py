@@ -327,25 +327,23 @@ def read_uploaded_file(fileinfo) -> pd.DataFrame:
 #
 # UI
 #
+
+# GA4: Track tab clicks — registered at top level to catch all tabs
+ui.tags.script("""
+    document.addEventListener('DOMContentLoaded', function() {
+        var tabs = document.querySelectorAll('.nav-tabs .nav-link');
+        tabs.forEach(function(tab) {
+            tab.addEventListener('click', function() {
+                sendABEvent('ab_tab_click', { tab_name: this.textContent.trim() });
+            });
+        });
+    });
+""")
+
 with ui.navset_tab():
 
     # Tab 1: Data Upload
     with ui.nav_panel("Data Upload"):
-
-        # GA4: Track tab click — inject JS listener once
-        # We attach a MutationObserver / click listener via a script block.
-        # Simpler alternative: fire event when status_ui updates successfully.
-        ui.tags.script("""
-            // Track when user clicks the "Data Upload" tab
-            document.addEventListener('DOMContentLoaded', function() {
-                var tabs = document.querySelectorAll('.nav-tabs .nav-link');
-                tabs.forEach(function(tab) {
-                    tab.addEventListener('click', function() {
-                        sendABEvent('ab_tab_click', { tab_name: this.textContent.trim() });
-                    });
-                });
-            });
-        """)
 
         with ui.layout_columns(col_widths=(5, 7)):
             with ui.card(class_="upload-card"):
@@ -471,13 +469,18 @@ with ui.navset_tab():
                                     "Value": [df.shape[0], df.shape[1]]
                                 })
 
-                            # GA4: Track "summary_viewed"
+                            # GA4: Track "summary_viewed" — fires once per session
                             @render.ui
                             def summary_viewed_tracker():
                                 df = current_df.get()
                                 if df.empty:
                                     return ui.div()
-                                return ga_event_script("ab_summary_viewed")
+                                return ui.tags.script("""
+                                    if (!sessionStorage.getItem('ab_summary_viewed')) {
+                                        sessionStorage.setItem('ab_summary_viewed', '1');
+                                        sendABEvent('ab_summary_viewed');
+                                    }
+                                """)
 
                         with ui.nav_panel("Preview"):
                             @render.data_frame

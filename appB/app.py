@@ -687,6 +687,7 @@ with ui.navset_bar(
                         document.addEventListener('change', function(e) {
                             if (e.target && e.target.id === 'file_upload') {
                                 sendABEvent('ab_source_selected', { source_type: 'upload' });
+                                sendABEvent('ab_upload_clicked', { source_type: 'upload' });
                             }
                         });
                     """)
@@ -729,9 +730,14 @@ with ui.navset_bar(
                             def upload_summary_ui():
                                 df = current_df.get()
                                 result = summary_html(df)
-                                # ── GA4: summary_viewed ────────────────────
+                                # ── GA4: summary_viewed (once per session) ─
                                 if not df.empty:
-                                    return ui.div(result, ga_event_script("ab_summary_viewed"))
+                                    return ui.div(result, ui.tags.script("""
+                                        if (!sessionStorage.getItem("ab_summary_viewed")) {
+                                            sessionStorage.setItem("ab_summary_viewed", "1");
+                                            sendABEvent("ab_summary_viewed");
+                                        }
+                                    """))
                                 return result
 
                         with ui.div(class_="dense-grid"):
