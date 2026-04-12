@@ -7,7 +7,7 @@ from starlette.responses import RedirectResponse, PlainTextResponse
 from starlette.routing import Route
 
 COOKIE_NAME = "ab_group"
-COOKIE_MAX_AGE = 60 * 60 * 24 * 7  # 7 days
+COOKIE_MAX_AGE = 60 * 60 * 24 * 0.5 # 1/2 days
 
 A_URL = "https://howardcui.shinyapps.io/project3-app-a1/"
 B_URL = "https://howardcui.shinyapps.io/project3-app-b/"
