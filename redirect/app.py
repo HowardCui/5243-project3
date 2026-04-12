@@ -1,3 +1,6 @@
+#!/usr/bin/env python 3.12
+# -*- coding: utf-8 -*-
+# time: 2026/04/10
 import random
 from starlette.applications import Starlette
 from starlette.responses import RedirectResponse, PlainTextResponse

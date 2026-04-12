@@ -1,7 +1,2 @@
-shiny
-pandas
-numpy
-matplotlib
-pyreadr
-openpyxl
-jinja2
+starlette
+uvicorn

@@ -4,3 +4,4 @@ numpy
 matplotlib
 pyreadr
 openpyxl
+jinja2
