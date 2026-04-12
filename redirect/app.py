@@ -1,72 +1,92 @@
-#!/usr/bin/env python 3.12
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# time: 2026/04/10
+# A/B Test Entry Router — Shiny Express version
+
+from shiny.express import input, render, ui
+from shiny import reactive
 import random
-from starlette.applications import Starlette
-from starlette.responses import RedirectResponse, PlainTextResponse
-from starlette.routing import Route
 
-COOKIE_NAME = "ab_group"
-COOKIE_MAX_AGE = 60 * 60 * 24 * 0.5 # 1/2 days
+# Config
+A_URL="https://howardcui.shinyapps.io/project3-app-a1/"
+B_URL="https://howardcui.shinyapps.io/project3-app-b/"
 
-A_URL = "https://howardcui.shinyapps.io/project3-app-a1/"
-B_URL = "https://howardcui.shinyapps.io/project3-app-b/"
+COOKIE_NAME="ab_group"
+COOKIE_MAX_AGE=60 * 60 * 24 * 1/2  # 1/2 days
 
+#Page setup
+ui.page_opts(title="Data Studio", fillable=True)
 
-async def entry_router(request):
-    group = request.cookies.get(COOKIE_NAME)
+#
+ui.tags.head(
+    ui.tags.script(f"""
+        (function() {{
+            var COOKIE = '{COOKIE_NAME}';
+            var A_URL  = '{A_URL}';
+            var B_URL  = '{B_URL}';
+            var MAX_AGE = {COOKIE_MAX_AGE};
 
-    if group not in ("A", "B"):
-        group = random.choice(["A", "B"])
+            function getCookie(name) {{
+                var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+                return match ? match[2] : null;
+            }}
 
-    target = A_URL if group == "A" else B_URL
-    response = RedirectResponse(url=target)
+            function setCookie(name, value, maxAge) {{
+                document.cookie = name + '=' + value +
+                    '; max-age=' + maxAge +
+                    '; path=/; samesite=lax';
+            }}
 
-    response.set_cookie(
-        key=COOKIE_NAME,
-        value=group,
-        max_age=COOKIE_MAX_AGE,
-        httponly=False,
-        samesite="lax",
-    )
-    return response
+            // Check URL param for forced group (?group=A or ?group=B)
+            var params = new URLSearchParams(window.location.search);
+            var forced = params.get('group');
+            if (forced === 'A' || forced === 'B') {{
+                setCookie(COOKIE, forced, MAX_AGE);
+            }}
 
+            var group = getCookie(COOKIE);
+            if (group !== 'A' && group !== 'B') {{
+                group = Math.random() < 0.5 ? 'A' : 'B';
+                setCookie(COOKIE, group, MAX_AGE);
+            }}
 
-async def force_a(request):
-    response = RedirectResponse(url=A_URL)
-    response.set_cookie(
-        key=COOKIE_NAME,
-        value="A",
-        max_age=COOKIE_MAX_AGE,
-        httponly=False,
-        samesite="lax",
-    )
-    return response
-
-
-async def force_b(request):
-    response = RedirectResponse(url=B_URL)
-    response.set_cookie(
-        key=COOKIE_NAME,
-        value="B",
-        max_age=COOKIE_MAX_AGE,
-        httponly=False,
-        samesite="lax",
-    )
-    return response
-
-
-async def debug_group(request):
-    group = request.cookies.get(COOKIE_NAME, "not_set")
-    return PlainTextResponse(f"Current ab_group cookie: {group}")
-
-
-app = Starlette(
-    routes=[
-        Route("/", entry_router),
-        Route("/goA", force_a),
-        Route("/goB", force_b),
-        Route("/debug-group", debug_group),
-    ]
+            var target = group === 'A' ? A_URL : B_URL;
+            window.location.replace(target);
+        }})();
+    """)
 )
 
+# UI
+ui.tags.style("""
+    body {
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background: #f8fbfd;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    .loading-wrap {
+        text-align: center;
+    }
+    .spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid #d8e6ef;
+        border-top-color: #89bdd8;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text {
+        font-size: 15px;
+        color: #475569;
+    }
+""")
+
+ui.div(
+    ui.div(class_="spinner"),
+    ui.div("Loading Data Studio…", class_="loading-text"),
+    class_="loading-wrap"
+)
