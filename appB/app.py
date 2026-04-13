@@ -34,10 +34,11 @@ ui.tags.head(
 
         if (!sessionStorage.getItem('ab_user_id')) {{
             sessionStorage.setItem('ab_user_id', 'u_' + Math.random().toString(36).substr(2, 9));
-            sessionStorage.setItem('ab_entry_time', Date.now());
         }}
-        var AB_USER_ID    = sessionStorage.getItem('ab_user_id');
-        var AB_ENTRY_TIME = parseInt(sessionStorage.getItem('ab_entry_time'));
+        // Reset entry time on every page load so timing is accurate per visit
+        var AB_ENTRY_TIME = Date.now();
+        sessionStorage.setItem('ab_entry_time', AB_ENTRY_TIME);
+        var AB_USER_ID = sessionStorage.getItem('ab_user_id');
 
         function sendABEvent(event_name, extra_params) {{
             gtag('event', event_name, Object.assign({{
@@ -47,15 +48,27 @@ ui.tags.head(
             }}, extra_params || {{}}));
         }}
 
-        sendABEvent('ab_session_start');
+        // Fire ab_session_start after page fully loads to avoid race condition with gtag
+        window.addEventListener('load', function() {{
+            sendABEvent('ab_session_start');
+        }});
 
-        // Track navbar tab clicks
+        // Track tab clicks + record time when Generate plot is clicked
         document.addEventListener('DOMContentLoaded', function() {{
             var tabs = document.querySelectorAll('.nav-tabs .nav-link, .navbar-nav .nav-link');
             tabs.forEach(function(tab) {{
                 tab.addEventListener('click', function() {{
                     sendABEvent('ab_tab_click', {{ tab_name: this.textContent.trim() }});
                 }});
+            }});
+
+            // Record timestamp when user clicks Generate plot button
+            document.addEventListener('click', function(e) {{
+                var btn = e.target.closest && e.target.closest('#generate_plot');
+                if (!btn) btn = (e.target.id === 'generate_plot') ? e.target : null;
+                if (btn) {{
+                    sessionStorage.setItem('ab_plot_start_time', Date.now());
+                }}
             }});
         }});
     """)

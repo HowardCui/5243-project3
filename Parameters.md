@@ -8,7 +8,7 @@ All custom events automatically include the following three parameters:
 |---|---|---|
 | `ab_group` | `"A"` / `"B"` | Identifies the experiment group. Fixed as `"A"` for Version A and `"B"` for Version B. |
 | `user_id_custom` | `"u_k3x9mw2pq"` | Unique user identifier randomly generated on page load. Stored in `sessionStorage` — persists within the same browser session and resets when the browser is closed. |
-| `entry_time` | `1712789423000` | Unix timestamp (milliseconds) recorded when the user first opens the page. Used to calculate time elapsed at each step. |
+| `entry_time` | `1712789423000` | Unix timestamp (milliseconds) recorded on every page load. Resets on each page refresh. Used to calculate `time_to_completion_sec`. |
 
 ---
 
@@ -16,11 +16,11 @@ All custom events automatically include the following three parameters:
 
 ### 1. `ab_session_start`
 
-- **Trigger**: Fires once immediately after the page finishes loading
+- **Trigger**: Fires once after the page and all resources have fully loaded (`window.load` event)
 - **Additional Parameters**: None
 - **Corresponding Metric**: Entry time
 - **Applies to**: Version A, Version B
-- **Notes**: Marks the beginning of one experiment session. Combined with `entry_time`, allows reconstruction of when each user entered the app.
+- **Notes**: Marks the beginning of one experiment session. Fired via `window.addEventListener('load', ...)` to ensure gtag is fully initialized before sending. Combined with `entry_time`, allows reconstruction of when each user entered the app.
 
 ---
 
@@ -116,11 +116,11 @@ All custom events automatically include the following three parameters:
 
 | Parameter | Example Value | Description |
 |---|---|---|
-| `time_to_completion_sec` | `"47"` | Seconds from page entry to first successful chart generation. Calculated in the browser as `Math.round((Date.now() - AB_ENTRY_TIME) / 1000)`. |
+| `time_to_completion_sec` | `"47"` | Seconds from page load to first successful chart generation. Calculated in the browser as `Math.round((Date.now() - AB_ENTRY_TIME) / 1000)`. Resets on page refresh. |
 
 - **Corresponding Metrics**: Task completion rate, Time to completion
 - **Applies to**: Version A, Version B
-- **Notes**: Fires only once per session (guarded by `sessionStorage` key `ab_completed`). Task completion rate = users who triggered `ab_task_completed` / total users who triggered `ab_session_start`.
+- **Notes**: Fires only once per page load (guarded by `sessionStorage` key `ab_completed`). If the user refreshes after completing the task, the guard remains and prevents re-firing — the original record is preserved. Task completion rate = users who triggered `ab_task_completed` / total users who triggered `ab_session_start`.
 
 ---
 
