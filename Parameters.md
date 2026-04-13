@@ -146,20 +146,7 @@ ab_session_start
 ab_upload_success
 ↓
 ab_visualization_created
-↓
-ab_task_completed
 ```
 
----
 
-## Key Metric Formulas
-
-| Metric | Formula |
-|---|---|
-| Task completion rate | `ab_task_completed` users / `ab_session_start` users |
-| Upload success rate | `ab_upload_success` users / `ab_upload_clicked` users |
-| Visualization generation rate | `ab_visualization_created` users / `ab_session_start` users |
-| Summary view rate | `ab_summary_viewed` users / `ab_upload_success` users |
-| Upload error rate | `ab_upload_error` users / `ab_upload_clicked` users |
-| Avg. time to completion | Mean of `time_to_completion_sec` across `ab_task_completed` events |
 
