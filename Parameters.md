@@ -142,16 +142,12 @@ All custom events automatically include the following three parameters:
 
 ```
 ab_session_start
-       ↓
-ab_source_selected
-       ↓
-ab_upload_clicked
-       ↓
-ab_upload_success / ab_upload_error
-       ↓
-ab_summary_viewed
-       ↓
-ab_visualization_created  ──→  ab_task_completed (fires once, same trigger)
+↓
+ab_upload_success
+↓
+ab_visualization_created
+↓
+ab_task_completed
 ```
 
 ---
