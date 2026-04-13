@@ -55,11 +55,10 @@ ui.tags.head(
         // but resets on a new browser session (fits the experiment design).
         if (!sessionStorage.getItem('ab_user_id')) {{
             sessionStorage.setItem('ab_user_id', 'u_' + Math.random().toString(36).substr(2, 9));
+            sessionStorage.setItem('ab_entry_time', Date.now());
         }}
-        // Reset entry time on every page load so timing is accurate per visit
-        var AB_ENTRY_TIME = Date.now();
-        sessionStorage.setItem('ab_entry_time', AB_ENTRY_TIME);
-        var AB_USER_ID = sessionStorage.getItem('ab_user_id');
+        var AB_USER_ID   = sessionStorage.getItem('ab_user_id');
+        var AB_ENTRY_TIME = parseInt(sessionStorage.getItem('ab_entry_time'));
 
         // ── Helper: send a GA4 custom event with shared AB dimensions ──────
         function sendABEvent(event_name, extra_params) {{
@@ -71,10 +70,7 @@ ui.tags.head(
         }}
 
         // ── Log session start ──────────────────────────────────────────────
-        // Fire ab_session_start after page fully loads to avoid race condition with gtag
-        window.addEventListener('load', function() {{
-            sendABEvent('ab_session_start');
-        }});
+        sendABEvent('ab_session_start');
     """)
 )
 
