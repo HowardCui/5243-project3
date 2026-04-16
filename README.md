@@ -75,18 +75,11 @@ Once data is loaded, a summary table will appear automatically showing column ty
    | Histogram | Distribution of one variable | A, B |
    | Box | Distribution by group | A, B |
    | Bar | Category counts or means | A, B |
-   | Correlation Heatmap | Pairwise correlations | B only |
 
 3. Select the variable(s) for the axes
 4. Click **Generate Plot**
 
 > A plot will only render if the selected variables contain valid, non-empty data after removing missing values.
-
----
-
-### Step 4 — Export (Version B only)
-
-Navigate to the **Export** tab to download the current chart or summary as a file.
 
 ---
 
