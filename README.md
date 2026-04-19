@@ -1,5 +1,5 @@
 # GU5243 Project 03
-### Collaborators：Haowen Cui(@HowardCui), Pengyu Chen(@Darconshal), ...
+### Collaborators：Haowen Cui(@HowardCui), Pengyu Chen(@Darconshal), Rui Lin(@R0R0Rui)...   
 ---
 ## Project Structure
 
