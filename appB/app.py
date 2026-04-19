@@ -656,7 +656,7 @@ with ui.navset_bar(
             ui.markdown(
                 """
                 1. **Data Upload**: Load a sample dataset or upload your own file.
-                2. **EDA**: Select a plot type and variables, then click **Generate plot** to create a visualization.
+                2. **Exploratory Data Analysis**: Select a plot type and variables, then click **Generate plot** to create a visualization.
                 3. **Export**: Download the processed dataset when you are done.
                 """
             )
@@ -750,7 +750,7 @@ with ui.navset_bar(
                                     return render.DataGrid(pd.DataFrame({"Message": ["No data loaded"]}), width="100%", height="220px")
                                 return render.DataGrid(df.head(15), width="100%", height="220px")
 
-    with ui.nav_panel("EDA"):
+    with ui.nav_panel("Exploratory Data Analysis"):
         with ui.layout_columns(col_widths=(4, 8)):
             with ui.card(class_="left-tools eda-viz-panel"):
                 ui.div("Visualization", class_="section-title")

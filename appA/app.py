@@ -343,15 +343,12 @@ ui.tags.script("""
 with ui.navset_tab():
 
     # Tab 1: Data Upload
-    with ui.nav_panel("Data Upload"):
+    with ui.nav_panel("Data"):
 
         with ui.layout_columns(col_widths=(5, 7)):
             with ui.card(class_="upload-card"):
-                ui.div("Data Upload", class_="upload-title")
-                ui.div(
-                    "Choose a sample dataset or upload your own file.",
-                    class_="upload-subtitle"
-                )
+                ui.div("Data", class_="upload-title")
+                
 
                 with ui.div(class_="decor-block"):
                     ui.div("Choose source", class_="section-label")
@@ -517,7 +514,7 @@ with ui.navset_tab():
                                 })
 
     # Tab 2: EDA
-    with ui.nav_panel("Exploratory Data Analysis"):
+    with ui.nav_panel("EDA"):
 
         # Block 1: Dataset Summary
         with ui.card(class_="content-card"):
