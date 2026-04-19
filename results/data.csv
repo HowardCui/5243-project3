@@ -1,0 +1,20 @@
+# ----------------------------------------
+# project 3 test_2 
+# Funnel-Funnel exploration 1
+# 20260321-20260417
+# ----------------------------------------
+
+Step,AB Group,Active users,Completion rate,Abandonments,Abandonment rate
+1. start,Total,161,0.5838509316770186,67,0.4161490683229814
+1. start,B,85,0.49411764705882355,43,0.5058823529411764
+1. start,A,75,0.68,24,0.32
+1. start,(not set),1,1,0,0
+2. upload,Total,94,0.7340425531914894,25,0.26595744680851063
+2. upload,B,42,0.8571428571428571,6,0.14285714285714285
+2. upload,A,51,0.6274509803921569,19,0.37254901960784315
+2. upload,(not set),1,1,0,0
+3. visualization,Total,69,-,-,-
+3. visualization,B,36,-,-,-
+3. visualization,A,32,-,-,-
+3. visualization,(not set),1,-,-,-
+
