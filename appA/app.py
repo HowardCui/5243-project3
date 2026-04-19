@@ -561,57 +561,6 @@ with ui.navset_tab():
 
         ui.br()
 
-        # Block 1a: Feature Engineering
-        with ui.card(class_="content-card"):
-            ui.div("Feature Engineering", class_="status-title")
-
-            with ui.layout_columns(col_widths=(4, 4, 4)):
-                ui.input_select("fe_column", "Select column", choices={})
-                ui.input_select(
-                    "fe_transformation",
-                    "Transformation",
-                    choices={
-                        "log": "Log Transform",
-                        "square": "Square",
-                        "bin": "Binning",
-                        "standardize": "Standardize (Z-score)",
-                        "scale": "Scale (Min-Max)"}
-                )
-                ui.input_slider(
-                    "fe_bins",
-                    "Bins for binning",
-                    min=2, max=10, value=3
-                )
-            ui.input_action_button("apply_fe", "Apply")
-
-            @render.ui
-            def fe_status_ui():
-                info = fe_status.get()
-                if info["status"] == "idle" or not info["message"]:
-                    return ui.div()
-                cls = "status-box status-success" if info["status"] == "success" else "status-box status-error"
-                return ui.div(info["message"], class_=cls, style="margin-top: 10px;")
-
-            @render.ui
-            def engineered_columns_ui():
-                cols = engineered_columns.get()
-                if not cols:
-                    return ui.div()
-
-                rows = "".join(
-                    f"<tr><td>{c['name']}</td><td>{c['derived_from']}</td><td>{c['transformation']}</td></tr>"
-                    for c in cols
-                )
-                html = f"""
-                <div style="margin-top:16px;">
-                  <div class="section-label">Engineered Variables</div>
-                  <table class="table table-sm table-bordered" style="margin-top:8px;">
-                    <thead><tr><th>New Column</th><th>Derived From</th><th>Transformation</th></tr></thead>
-                    <tbody>{rows}</tbody>
-                  </table>
-                </div>
-                """
-                return ui.HTML(html)
 
         # Block 2: Plot Controls
         with ui.card(class_="content-card"):
