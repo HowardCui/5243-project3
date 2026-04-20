@@ -40,7 +40,9 @@
 └── README.md
 
 The `results/` folder stores analysis outputs and report assets, including the exported funnel dataset and interface screenshots used in the report.
-                  
+
+```
+                 
 ## How to Use
 
 ### Getting Started
