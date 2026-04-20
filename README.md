@@ -1,15 +1,11 @@
 # GU5243 Project 03
-### Collaborators：Haowen Cui(@HowardCui), Pengyu Chen(@Darconshal), Rui Lin(@R0R0Rui)...   
+### Collaborators：Haowen Cui(@HowardCui), Pengyu Chen(@Darconshal), Rui Lin(@R0R0Rui), Crystal Guo (@CrystalF042)   
 ---
+
 ## Project Structure
 
 ```text
 5243-project3/
-├── redirect/
-│   ├── app.py
-│   ├── requirements.txt
-│   └── rsconnect-python/
-│
 ├── appA/
 │   ├── app.py
 │   ├── data/
@@ -28,9 +24,23 @@
 │   ├── requirements.txt
 │   └── rsconnect-python/
 │
+├── redirect/
+│   ├── app.py
+│   ├── requirements.txt
+│   └── rsconnect-python/
+│
+├── results/
+│   ├── data.csv
+│   ├── versionA.png
+│   └── versionB.png
+│
 ├── Parameters.md
+├── Project_3_Report_Team16.ipynb
+├── Statistical Analysis.ipynb
 └── README.md
-```                       
+
+The `results/` folder stores analysis outputs and report assets, including the exported funnel dataset and interface screenshots used in the report.
+                  
 ## How to Use
 
 ### Getting Started
